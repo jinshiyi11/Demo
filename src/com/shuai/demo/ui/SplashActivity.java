@@ -8,26 +8,36 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.shuai.demo.R;
+import com.umeng.message.PushAgent;
 
 public class SplashActivity extends Activity {
     private static long SPLASH_DURATION = 2000;
+    
+    private Handler mHandler=new Handler();
+    private Runnable mCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        //为推送服务统计启动信息
+        PushAgent.getInstance(this).onAppStart();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
+        
 
-        new Handler().postDelayed(new Runnable() {
+        mCallback=new Runnable() {
 
             @Override
             public void run() {
+                mCallback=null;
                 startMainActivity();
             }
 
-        }, SPLASH_DURATION);
+        };
+        mHandler.postDelayed(mCallback, SPLASH_DURATION);
 
     }
 
@@ -35,6 +45,14 @@ public class SplashActivity extends Activity {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mCallback!=null){
+            mHandler.removeCallbacks(mCallback);
+        }
+        super.onDestroy();
     }
 
 }
