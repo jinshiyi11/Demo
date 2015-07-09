@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.shuai.demo.R;
 import com.umeng.message.PushAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -21,6 +22,11 @@ public class MainActivity extends Activity {
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.onAppStart();
         mPushAgent.enable();
+        
+        //自动更新
+        UmengUpdateAgent.update(this);
+        //UmengUpdateAgent.silentUpdate(this);静默下载更新
+        UmengUpdateAgent.setUpdateOnlyWifi(false);
     }
 
 }
