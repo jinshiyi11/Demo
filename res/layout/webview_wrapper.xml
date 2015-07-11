@@ -35,7 +35,7 @@
             android:visibility="gone" >
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/icon"
                 android:layout_width="166dp"
                 android:layout_height="166dp"
                 android:layout_gravity="center_horizontal"
