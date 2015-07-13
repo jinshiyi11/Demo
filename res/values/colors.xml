@@ -3,5 +3,8 @@
     <color name="transparent_color">#0000</color>
     <color name="white_color">#ffffffff</color>
     <color name="black_color">#ff000000</color>
+    <color name="default_background_color">#f5f4f9</color>
+    <color name="default_title_background_color">#f7f7f8</color>
+    <color name="default_title_bottom_line_color">#abaaae</color>
     
 </resources>
