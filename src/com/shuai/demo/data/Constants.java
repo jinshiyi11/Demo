@@ -1,6 +1,10 @@
 package com.shuai.demo.data;
 
 public class Constants {
+    
+    public static final String SMS_APP_KEY="";
+    
+    public static final String SMS_APP_SECRET="";
 
     /**
      * QQ appid

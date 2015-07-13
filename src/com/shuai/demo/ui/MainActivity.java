@@ -126,7 +126,6 @@ public class MainActivity extends BaseFragmentActivity {
             widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
             mTabHost.setCurrentTab(position);
             widget.setDescendantFocusability(oldFocusability);
-            Log.v(TAG, "onPageSelected" + position);
         }
 
         @Override
