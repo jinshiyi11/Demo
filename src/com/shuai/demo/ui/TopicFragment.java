@@ -1,18 +1,20 @@
 package com.shuai.demo.ui;
 
-import com.shuai.demo.R;
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-public class TopicFragment extends Fragment {
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_topic, container, false);
-        return view;        
-    }
+import com.shuai.demo.R;
+import com.shuai.demo.ui.base.BaseTabFragment;
+
+public class TopicFragment extends BaseTabFragment {
+	
+	public TopicFragment() {
+		super(R.layout.fragment_topic);
+	}
+
+	@Override
+	protected void onInit(View inflated) {
+		
+	}
+
 
 }
