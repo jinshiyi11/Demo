@@ -58,8 +58,30 @@
         android:id="@+id/ll_name"
         android:layout_width="match_parent"
         android:layout_height="59dp"
-        android:orientation="horizontal"
-        android:background="#ffffff" >
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/iv_account"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="20dp" />
+
+        <EditText
+            android:id="@+id/et_account"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:ems="10"
+            android:singleLine="true" >
+
+            <requestFocus />
+        </EditText>
+
     </LinearLayout>
     
     <!-- split line -->
@@ -68,11 +90,31 @@
             android:background="#e0e0e0" />
     
     <LinearLayout
-        android:id="@+id/ll_verify_sms"
+        android:id="@+id/ll_password"
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:background="#ffffff" >
+        <ImageView
+            android:id="@+id/iv_password"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="20dp" />
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:singleLine="true" >
+
+        </EditText>
     </LinearLayout>
     
     <!-- split line -->
