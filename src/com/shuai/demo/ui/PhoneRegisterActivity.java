@@ -11,8 +11,15 @@ import android.widget.EditText;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
+import com.shuai.demo.MyApplication;
 import com.shuai.demo.R;
 import com.shuai.demo.data.Constants;
+import com.shuai.demo.protocol.LoginResult;
+import com.shuai.demo.protocol.PhoneRegisterTask;
 import com.shuai.demo.ui.base.BaseActivity;
 import com.shuai.demo.utils.Utils;
 
@@ -32,11 +39,14 @@ public class PhoneRegisterActivity extends BaseActivity implements
 
 	private Handler mHandler = new Handler();
 	private EventHandler mEventHandler;
+	private RequestQueue mRequestQueue;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_phone_register);
+		
+		mRequestQueue=MyApplication.getRequestQueue();
 
 		mBtnGetVerifySms = (Button) findViewById(R.id.btn_get_verify_sms);
 		mBtnRegister = (Button) findViewById(R.id.btn_register);
@@ -82,6 +92,8 @@ public class PhoneRegisterActivity extends BaseActivity implements
 		if (mEventHandler != null) {
 			SMSSDK.unregisterEventHandler(mEventHandler);
 		}
+		
+		mRequestQueue.cancelAll(this);
 		super.onDestroy();
 	}
 
@@ -148,7 +160,22 @@ public class PhoneRegisterActivity extends BaseActivity implements
 			return;
 		}
 
-		// TODO:验证短信，注册
+		PhoneRegisterTask request=new PhoneRegisterTask(this,phone,verifyCode,password,new Listener<LoginResult>() {
+
+			@Override
+			public void onResponse(LoginResult arg0) {
+				
+			}
+		},new ErrorListener(){
+
+			@Override
+			public void onErrorResponse(VolleyError arg0) {
+				
+			}
+			
+		});
+		request.setTag(this);       
+        mRequestQueue.add(request);
 	}
 
 }

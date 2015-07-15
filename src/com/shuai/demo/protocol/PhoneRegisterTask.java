@@ -22,20 +22,19 @@ import com.shuai.demo.data.Constants;
 import com.shuai.demo.utils.Utils;
 
 
-/**
- * 通过用户名密码方式登录
- */
-public class LoginByAccountTask extends JsonRequest<LoginResult> {
-	private final static String TAG=LoginByAccountTask.class.getSimpleName();
-	private static final String ACCOUNT_LOGIN_URL = "";
+public class PhoneRegisterTask extends JsonRequest<LoginResult> {
+	private final static String TAG=PhoneRegisterTask.class.getSimpleName();
+	private static final String PHONE_REGISTER_URL = "";
 
-	public LoginByAccountTask(Context context,String account,String password,Listener<LoginResult> listener, ErrorListener errorListener) {
-		super(Method.GET, getUrl(context,ACCOUNT_LOGIN_URL,account,Utils.md5(password)),null, listener, errorListener);
+	public PhoneRegisterTask(Context context,String phone,String verifyCode,String password,
+			Listener<LoginResult> listener, ErrorListener errorListener) {
+		super(Method.GET, getUrl(context,PHONE_REGISTER_URL,phone,verifyCode,Utils.md5(password)), null, listener, errorListener);
 	}
 	
-	private static String getUrl(Context context,String url, String account,String password){
+	private static String getUrl(Context context,String url, String phone,String verifyCode,String password){
 		List<BasicNameValuePair> params = new LinkedList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("account", account));
+        params.add(new BasicNameValuePair("phone", phone));
+        params.add(new BasicNameValuePair("verify_code", verifyCode));
         params.add(new BasicNameValuePair("password", password));
         
         UrlHelper.addCommonParameters(context, params);
@@ -49,7 +48,7 @@ public class LoginByAccountTask extends JsonRequest<LoginResult> {
             if(Constants.DEBUG){
                 Log.d(TAG, jsonString);
             }
-            
+             
             //TODO:处理返回error code的情况
             Gson gson=new Gson();
 

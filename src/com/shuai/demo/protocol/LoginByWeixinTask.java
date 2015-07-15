@@ -51,7 +51,7 @@ public class LoginByWeixinTask {
 		private final String TAG=getClass().getSimpleName();
 
 		public LoginToServerTask(Context context,String token) {
-			super(Method.POST, WEIXIN_LOGIN_URL, getRequestBody(context,token), mListener, mErrorListener);
+			super(Method.GET, LoginByWeixinTask.getUrl(context,WEIXIN_LOGIN_URL,token),null, mListener, mErrorListener);
 		}
 
 		@Override
@@ -77,12 +77,12 @@ public class LoginByWeixinTask {
 
 	}
 	
-	private static String getRequestBody(Context context,String token){
+	private static String getUrl(Context context,String url, String token){
 		List<BasicNameValuePair> params = new LinkedList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
         
         UrlHelper.addCommonParameters(context, params);
-		return URLEncodedUtils.format(params, "UTF-8");
+		return url+"?"+URLEncodedUtils.format(params, "UTF-8");
 	}
 
 	public LoginByWeixinTask(Context context, Listener<LoginResult> listener,ErrorListener errorListener) {
