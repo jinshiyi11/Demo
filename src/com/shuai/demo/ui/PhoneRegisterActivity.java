@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +44,8 @@ public class PhoneRegisterActivity extends BaseActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_phone_register);
 		
@@ -99,7 +102,7 @@ public class PhoneRegisterActivity extends BaseActivity implements
 
 	@Override
 	public void onClick(View v) {
-		int id = mBtnGetVerifySms.getId();
+		int id = v.getId();
 		switch (id) {
 		case R.id.btn_get_verify_sms:
 			onBtnGetVerifySmsClicked();

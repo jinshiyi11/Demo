@@ -13,9 +13,9 @@ public class Constants {
 	
 	public static final String SERVER_ADDRESS = null;
     
-    public static final String SMS_APP_KEY="";
+    public static final String SMS_APP_KEY="8b1c354b47e0";
     
-    public static final String SMS_APP_SECRET="";
+    public static final String SMS_APP_SECRET="28a07128005b67802260f8bf3858f0ea";
 
     /**
      * QQ appid

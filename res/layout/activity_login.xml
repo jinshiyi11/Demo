@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="登录"
+            android:textSize="@dimen/default_title_text_size"
             android:textColor="#333333" />
 
         <TextView
@@ -36,6 +37,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:text="注册"
+            android:textSize="17sp"
             android:textColor="#ed6a48" />
 
         <View
@@ -77,7 +79,8 @@
             android:layout_weight="1"
             android:background="@null"
             android:ems="10"
-            android:singleLine="true" >
+            android:singleLine="true"
+            android:textSize="19sp" >
 
             <requestFocus />
         </EditText>
@@ -112,7 +115,8 @@
             android:background="@null"
             android:ems="10"
             android:inputType="textPassword"
-            android:singleLine="true" >
+            android:singleLine="true"
+            android:textSize="19sp" >
 
         </EditText>
     </LinearLayout>
@@ -125,13 +129,14 @@
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="15dp"
         android:gravity="center"
-        android:text="登录" />
+        android:text="登录"
+        android:textSize="19sp" />
 
     <TextView
         android:id="@+id/tv_country"
@@ -140,7 +145,8 @@
         android:layout_gravity="right"
         android:layout_marginRight="12dp"
         android:text="忘记密码"
-        android:textColor="#666666" />
+        android:textColor="#666666"
+        android:textSize="19sp" />
 
     <LinearLayout
         android:id="@+id/ll_login_option_tip"
@@ -153,14 +159,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="你还可以选择以下方式登录"
-            android:textColor="#666666" />
+            android:textColor="#666666"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_weixin_login"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="56dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="17dp"
@@ -168,8 +175,8 @@
 
         <ImageView
             android:id="@+id/iv_weixin"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:clickable="false"
             android:src="@drawable/ic_weixin" />
 
@@ -179,7 +186,8 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:text="微信登录"
-            android:textColor="#333333" />
+            android:textColor="#333333"
+            android:textSize="19sp" />
 
     </LinearLayout>
 
