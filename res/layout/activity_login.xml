@@ -175,15 +175,16 @@
 
         <ImageView
             android:id="@+id/iv_weixin"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:clickable="false"
-            android:src="@drawable/ic_weixin" />
+            android:src="@drawable/ic_weixin_logo" />
 
         <TextView
             android:id="@+id/tv_weixin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:clickable="false"
             android:text="微信登录"
             android:textColor="#333333"
