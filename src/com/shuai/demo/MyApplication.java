@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.shuai.demo.logic.AccountManager;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
@@ -17,6 +18,7 @@ import com.umeng.message.entity.UMessage;
 public class MyApplication extends Application {
 	private static final String TAG = MyApplication.class.getSimpleName();
 
+	private static Context mContext;
 	private PushAgent mPushAgent;
 	
 	/**
@@ -33,15 +35,21 @@ public class MyApplication extends Application {
         }
     }
 
+    public static Context getAppContext(){
+    	return mContext;
+    }
 
 	@Override
 	public void onCreate() {
+		mContext=this;
 		initPush();
 
 		// 初始化网络异步请求对象
 		mRequestQueue = Volley.newRequestQueue(this);
 
 		initImageLoader();
+		
+		AccountManager.getInstance().init(this);
 	}
 
 	/**

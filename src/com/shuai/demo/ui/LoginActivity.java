@@ -1,25 +1,29 @@
 package com.shuai.demo.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
 import com.shuai.demo.MyApplication;
 import com.shuai.demo.R;
+import com.shuai.demo.logic.AccountManager;
 import com.shuai.demo.protocol.LoginByAccountTask;
-import com.shuai.demo.protocol.LoginByWeixinTask;
-import com.shuai.demo.protocol.LoginResult;
-import com.shuai.demo.protocol.PhoneRegisterTask;
+import com.shuai.demo.protocol.ResponseError;
+import com.shuai.demo.protocol.TokenInfo;
+import com.shuai.demo.protocol.RegisterByWeixinTask;
+import com.shuai.demo.protocol.RegisterResult;
 import com.shuai.demo.ui.base.BaseActivity;
 import com.shuai.demo.utils.Utils;
 
@@ -27,16 +31,19 @@ import com.shuai.demo.utils.Utils;
  * 登陆界面
  */
 public class LoginActivity extends BaseActivity implements OnClickListener {
+	private Context mContext;
     private TextView mTvRegister;
     private EditText mEtAccount;
     private EditText mEtPassword;
     private Button mBtnLogin;
+    private LinearLayout mLlWeixinLogin;
     
     private RequestQueue mRequestQueue;
-    private LoginByWeixinTask mLoginByWeixinTask;
+    private RegisterByWeixinTask mLoginByWeixinTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	mContext=this;
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
     	
         super.onCreate(savedInstanceState);
@@ -51,7 +58,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         mEtAccount=(EditText) findViewById(R.id.et_account);
         mEtPassword=(EditText) findViewById(R.id.et_password);
         mBtnLogin = (Button) findViewById(R.id.btn_login);
+        mLlWeixinLogin=(LinearLayout) findViewById(R.id.ll_weixin_login);
         mBtnLogin.setOnClickListener(this);
+        mLlWeixinLogin.setOnClickListener(this);
     }
 
     @Override
@@ -70,9 +79,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         case R.id.tv_register:
             Intent intent=new Intent(this,PhoneRegisterActivity.class);
             startActivity(intent);
+            finish();
             break;
         case R.id.btn_login:
         	loginByAccount();
+        	break;
+        case R.id.ll_weixin_login:
+        	loginByWeixin();
         	break;
         }
     }
@@ -81,8 +94,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
      * 通过账户密码方式登录
      */
     private void loginByAccount(){
-    	String account=mEtAccount.getText().toString();
-    	String password=mEtPassword.getText().toString(); 
+    	final String account=mEtAccount.getText().toString();
+    	final String password=mEtPassword.getText().toString(); 
     	
     	if (TextUtils.isEmpty(account)) {
 			Utils.showShortToast(this, "请输入手机号");
@@ -94,20 +107,23 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			return;
 		}
     	
-    	LoginByAccountTask request=new LoginByAccountTask(this,account,password,new Listener<LoginResult>() {
+    	final String md5Password=Utils.md5(password);
+    	LoginByAccountTask request=new LoginByAccountTask(this,account,md5Password,new Listener<TokenInfo>() {
 
 			@Override
-			public void onResponse(LoginResult arg0) {
-				
+			public void onResponse(TokenInfo tokenInfo) {
+				AccountManager.getInstance().onLoginByPhoneSuccess(tokenInfo.getUid(), tokenInfo.getToken(), md5Password, account);
+				finish();
 			}
 		},new ErrorListener(){
 
 			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				
+			public void onErrorResponse(VolleyError error) {
+				Utils.showShortToast(mContext, ResponseError.getErrorMessage(error));
 			}
 			
 		});
+    	
 		request.setTag(this);       
         mRequestQueue.add(request);
     }
@@ -116,17 +132,18 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
      * 通过微信登录
      */
     private void loginByWeixin(){
-    	mLoginByWeixinTask=new LoginByWeixinTask(this, new Listener<LoginResult>() {
+    	mLoginByWeixinTask=new RegisterByWeixinTask(this, new Listener<RegisterResult>() {
 
 			@Override
-			public void onResponse(LoginResult arg0) {
-				
+			public void onResponse(RegisterResult result) {
+				AccountManager.getInstance().onLoginByWeixinSuccess(result.getUid(), result.getToken(), result.getPassword());
+				finish();
 			}
 		},new ErrorListener(){
 
 			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				
+			public void onErrorResponse(VolleyError error) {
+				Utils.showShortToast(mContext, ResponseError.getErrorMessage(error));
 			}
 			
 		});

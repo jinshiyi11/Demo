@@ -1,29 +1,28 @@
 package com.shuai.demo.protocol;
 
-import com.google.gson.annotations.SerializedName;
-
-/**
- * 登陆成功后返回的数据
- */
 public class LoginResult {
+	private boolean mIsLoginSuccess;
+	private int mErrorCode;
+	private String mErrorMessage;
 	
-	@SerializedName("uid")
-	private String mUid;
+	public LoginResult(){
+		mIsLoginSuccess=true;
+	}
 	
-	@SerializedName("token")
-	private String mToken;
+	public LoginResult(int errorCode,String errorMessage){
+		mErrorCode=errorCode;
+		mErrorMessage=errorMessage;
+	}
 	
-	public String getUid() {
-		return mUid;
-	}
-	public void setUid(String uid) {
-		this.mUid = uid;
-	}
-	public String getToken() {
-		return mToken;
-	}
-	public void setToken(String token) {
-		this.mToken = token;
+	public boolean isLoginSuccess(){
+		return mIsLoginSuccess;
 	}
 
+	public int getErrorCode(){
+		return mErrorCode;
+	}
+	
+	public String getErrorMessage(){
+		return mErrorMessage;
+	}
 }

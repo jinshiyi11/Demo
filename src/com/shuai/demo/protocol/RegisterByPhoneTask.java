@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,41 +19,49 @@ import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.shuai.demo.data.Constants;
-import com.shuai.demo.utils.Utils;
 
+/**
+ * 使用手机号+验证码注册
+ */
+public class RegisterByPhoneTask extends JsonRequest<RegisterResult> {
+	private final static String TAG=RegisterByPhoneTask.class.getSimpleName();
+	private static final String PHONE_REGISTER_URL = "register";
 
-public class PhoneRegisterTask extends JsonRequest<LoginResult> {
-	private final static String TAG=PhoneRegisterTask.class.getSimpleName();
-	private static final String PHONE_REGISTER_URL = "";
-
-	public PhoneRegisterTask(Context context,String phone,String verifyCode,String password,
-			Listener<LoginResult> listener, ErrorListener errorListener) {
-		super(Method.GET, getUrl(context,PHONE_REGISTER_URL,phone,verifyCode,Utils.md5(password)), null, listener, errorListener);
+	public RegisterByPhoneTask(Context context,String phone,String verifyCode,String password,
+			Listener<RegisterResult> listener, ErrorListener errorListener) {
+		super(Method.POST, PHONE_REGISTER_URL,getBody(context,phone,verifyCode,password), listener, errorListener);
 	}
 	
-	private static String getUrl(Context context,String url, String phone,String verifyCode,String password){
+	private static String getBody(Context context, String phone,String verifyCode,String password){
 		List<BasicNameValuePair> params = new LinkedList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("phone", phone));
+		params.add(new BasicNameValuePair("type", "phone"));
+        params.add(new BasicNameValuePair("username", phone));
         params.add(new BasicNameValuePair("verify_code", verifyCode));
         params.add(new BasicNameValuePair("password", password));
         
         UrlHelper.addCommonParameters(context, params);
-		return url+"?"+URLEncodedUtils.format(params, "UTF-8");
+		return URLEncodedUtils.format(params, "UTF-8");
 	}
 
 	@Override
-	protected Response<LoginResult> parseNetworkResponse(NetworkResponse response) {
+	protected Response<RegisterResult> parseNetworkResponse(NetworkResponse response) {
 		try {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             if(Constants.DEBUG){
                 Log.d(TAG, jsonString);
             }
-             
-            //TODO:处理返回error code的情况
+            
+            JSONObject root=new JSONObject(jsonString);
+            ResponseError error=ProtocolUtils.getProtocolInfo(root);
+            if(error.getErrorCode()!=0){
+            	return Response.error(error);
+            }
+            
+            String resultJson=root.get(ProtocolUtils.RESULT).toString();
             Gson gson=new Gson();
-
-            LoginResult result=gson.fromJson(jsonString, LoginResult.class);
+            RegisterResult result=gson.fromJson(resultJson, RegisterResult.class);
             
             return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {

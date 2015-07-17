@@ -5,8 +5,8 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import cn.smssdk.EventHandler;
@@ -19,8 +19,10 @@ import com.android.volley.VolleyError;
 import com.shuai.demo.MyApplication;
 import com.shuai.demo.R;
 import com.shuai.demo.data.Constants;
-import com.shuai.demo.protocol.LoginResult;
-import com.shuai.demo.protocol.PhoneRegisterTask;
+import com.shuai.demo.logic.AccountManager;
+import com.shuai.demo.protocol.RegisterByPhoneTask;
+import com.shuai.demo.protocol.RegisterResult;
+import com.shuai.demo.protocol.ResponseError;
 import com.shuai.demo.ui.base.BaseActivity;
 import com.shuai.demo.utils.Utils;
 
@@ -139,7 +141,7 @@ public class PhoneRegisterActivity extends BaseActivity implements
 	 * 用户点击了注册按钮
 	 */
 	private void onBtnRegisterClicked() {
-		String phone = mEtPhone.getText().toString();
+		final String phone = mEtPhone.getText().toString();
 		if (!checkPhoneNumber(phone)) {
 			Utils.showShortToast(this, "请输入正确的手机号");
 			return;
@@ -163,17 +165,18 @@ public class PhoneRegisterActivity extends BaseActivity implements
 			return;
 		}
 
-		PhoneRegisterTask request=new PhoneRegisterTask(this,phone,verifyCode,password,new Listener<LoginResult>() {
+		RegisterByPhoneTask request=new RegisterByPhoneTask(this,phone,verifyCode,Utils.md5(password),new Listener<RegisterResult>() {
 
 			@Override
-			public void onResponse(LoginResult arg0) {
-				
+			public void onResponse(RegisterResult result) {
+				AccountManager.getInstance().onLoginByPhoneSuccess(result.getUid(), result.getToken(), result.getPassword(), phone);
+				finish();
 			}
 		},new ErrorListener(){
 
 			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				
+			public void onErrorResponse(VolleyError error) {
+				Utils.showShortToast(PhoneRegisterActivity.this, ResponseError.getErrorMessage(error));
 			}
 			
 		});

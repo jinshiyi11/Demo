@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -31,41 +32,47 @@ import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 
 /**
- * 通过微信登录
- * 先登录到微信，拿到微信的token，然后把微信的token传到我们自己的服务器验证，服务端到微信的服务器验证该token并返回本系统的uid和token
+ * 通过微信注册
+ * 先登录到微信，拿到微信的token，然后把微信的token传到我们自己的服务器验证，服务端到微信的服务器验证该token并返回本系统的uid和token以及服务端为用户分配的随机密码
  */
-public class LoginByWeixinTask {
+public class RegisterByWeixinTask {
 	private final static String WEIXIN_LOGIN_URL="";
 	private AtomicBoolean mCanceled;
 
 	private Context mContext;
-	private Listener<LoginResult> mListener;
+	private Listener<RegisterResult> mListener;
 	private ErrorListener mErrorListener;
 	
 	private RequestQueue mRequestQueue;
 
 	/**
 	 * 拿到微信的token后，到app的服务端验证并登陆
+	 *  
 	 */
-	private class LoginToServerTask extends JsonRequest<LoginResult> {
+	private class LoginToServerTask extends JsonRequest<RegisterResult> {
 		private final String TAG=getClass().getSimpleName();
 
 		public LoginToServerTask(Context context,String token) {
-			super(Method.GET, LoginByWeixinTask.getUrl(context,WEIXIN_LOGIN_URL,token),null, mListener, mErrorListener);
+			super(Method.GET, RegisterByWeixinTask.getUrl(context,WEIXIN_LOGIN_URL,token),null, mListener, mErrorListener);
 		}
 
 		@Override
-		protected Response<LoginResult> parseNetworkResponse(NetworkResponse response) {
+		protected Response<RegisterResult> parseNetworkResponse(NetworkResponse response) {
 			try {
 	            String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
 	            if(Constants.DEBUG){
 	                Log.d(TAG, jsonString);
 	            }
 	            
-	            //TODO:处理返回error code的情况
+	            JSONObject root=new JSONObject(jsonString);
+	            ResponseError error=ProtocolUtils.getProtocolInfo(root);
+	            if(error.getErrorCode()!=0){
+	            	return Response.error(error);
+	            }
+	            
+	            String resultJson=root.get(ProtocolUtils.RESULT).toString();
 	            Gson gson=new Gson();
-
-	            LoginResult result=gson.fromJson(jsonString, LoginResult.class);
+	            RegisterResult result=gson.fromJson(resultJson, RegisterResult.class);
 	            
 	            return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
 	        } catch (UnsupportedEncodingException e) {
@@ -85,7 +92,7 @@ public class LoginByWeixinTask {
 		return url+"?"+URLEncodedUtils.format(params, "UTF-8");
 	}
 
-	public LoginByWeixinTask(Context context, Listener<LoginResult> listener,ErrorListener errorListener) {
+	public RegisterByWeixinTask(Context context, Listener<RegisterResult> listener,ErrorListener errorListener) {
 		mContext=context;
 		mListener=listener;
 		mErrorListener=errorListener;
@@ -119,7 +126,7 @@ public class LoginByWeixinTask {
 		        //授权错误
 		    	if(mCanceled.get())
 		    		return;
-		    	mErrorListener.onErrorResponse(new ProtocolError(ProtocolError.WEIXIN_OAUTH_ERROR, "微信授权错误"));
+		    	mErrorListener.onErrorResponse(new ResponseError(ResponseError.ERROR_WEIXIN_OAUTH_ERROR, "微信授权错误"));
 		    }
 		    @Override
 		    public void onComplete(Bundle value, SHARE_MEDIA platform) {
@@ -130,7 +137,7 @@ public class LoginByWeixinTask {
 		    	
 		    	
 		    	LoginToServerTask request=new LoginToServerTask(mContext,token);
-		    	request.setTag(LoginByWeixinTask.this);       
+		    	request.setTag(RegisterByWeixinTask.this);       
 		        mRequestQueue.add(request);
 		    }
 		    
@@ -139,7 +146,7 @@ public class LoginByWeixinTask {
 		        //授权取消
 		    	if(mCanceled.get())
 		    		return;
-		    	mErrorListener.onErrorResponse(new ProtocolError(ProtocolError.WEIXIN_OAUTH_ERROR, "微信授权被取消"));
+		    	mErrorListener.onErrorResponse(new ResponseError(ResponseError.ERROR_WEIXIN_OAUTH_ERROR, "微信授权被取消"));
 		    }
 		} );
 	}
