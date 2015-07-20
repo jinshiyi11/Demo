@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.shuai.demo.R;
 import com.shuai.demo.ui.base.BaseFragmentActivity;
 import com.umeng.message.PushAgent;
@@ -28,6 +30,12 @@ import com.umeng.update.UmengUpdateAgent;
 
 public class MainActivity extends BaseFragmentActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private Context mContext;
+    
+    /**
+     * 上次按下back按钮的时间
+     */
+    private long mLastBackPressedTime;
 
     //推送
     private PushAgent mPushAgent;
@@ -135,6 +143,7 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	mContext=this;
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -160,6 +169,18 @@ public class MainActivity extends BaseFragmentActivity {
 
         //防止回收被隐藏的page
         mViewPager.setOffscreenPageLimit(mTabsAdapter.getCount());
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	if (!getSupportFragmentManager().popBackStackImmediate()) {
+    		if(System.currentTimeMillis()-mLastBackPressedTime>2000){
+    	        mLastBackPressedTime=System.currentTimeMillis();
+    	        Toast.makeText(mContext, R.string.one_more_exit, Toast.LENGTH_SHORT).show();
+    	    }else{
+    	        super.onBackPressed();
+    	    }
+        }
     }
 
     @Override

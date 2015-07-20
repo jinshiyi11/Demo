@@ -20,9 +20,9 @@ import com.shuai.demo.MyApplication;
 import com.shuai.demo.R;
 import com.shuai.demo.data.Constants;
 import com.shuai.demo.logic.AccountManager;
+import com.shuai.demo.protocol.ProtocolUtils;
 import com.shuai.demo.protocol.RegisterByPhoneTask;
 import com.shuai.demo.protocol.RegisterResult;
-import com.shuai.demo.protocol.ResponseError;
 import com.shuai.demo.ui.base.BaseActivity;
 import com.shuai.demo.utils.Utils;
 
@@ -176,7 +176,7 @@ public class PhoneRegisterActivity extends BaseActivity implements
 
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Utils.showShortToast(PhoneRegisterActivity.this, ResponseError.getErrorMessage(error));
+				Utils.showShortToast(PhoneRegisterActivity.this, ProtocolUtils.getErrorInfo(error).getErrorMessage());
 			}
 			
 		});

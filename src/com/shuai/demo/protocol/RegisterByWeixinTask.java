@@ -65,7 +65,7 @@ public class RegisterByWeixinTask {
 	            }
 	            
 	            JSONObject root=new JSONObject(jsonString);
-	            ResponseError error=ProtocolUtils.getProtocolInfo(root);
+	            ErrorInfo error=ProtocolUtils.getProtocolInfo(root);
 	            if(error.getErrorCode()!=0){
 	            	return Response.error(error);
 	            }
@@ -126,7 +126,7 @@ public class RegisterByWeixinTask {
 		        //授权错误
 		    	if(mCanceled.get())
 		    		return;
-		    	mErrorListener.onErrorResponse(new ResponseError(ResponseError.ERROR_WEIXIN_OAUTH_ERROR, "微信授权错误"));
+		    	mErrorListener.onErrorResponse(new ErrorInfo(ErrorInfo.ERROR_WEIXIN_OAUTH_ERROR, "微信授权错误"));
 		    }
 		    @Override
 		    public void onComplete(Bundle value, SHARE_MEDIA platform) {
@@ -146,7 +146,7 @@ public class RegisterByWeixinTask {
 		        //授权取消
 		    	if(mCanceled.get())
 		    		return;
-		    	mErrorListener.onErrorResponse(new ResponseError(ResponseError.ERROR_WEIXIN_OAUTH_ERROR, "微信授权被取消"));
+		    	mErrorListener.onErrorResponse(new ErrorInfo(ErrorInfo.ERROR_WEIXIN_OAUTH_CANCEL, "微信授权被取消"));
 		    }
 		} );
 	}

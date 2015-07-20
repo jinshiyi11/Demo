@@ -20,6 +20,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.google.gson.Gson;
 import com.shuai.demo.data.Constants;
+import com.shuai.demo.logic.AccountManager;
 
 
 /**
@@ -29,15 +30,21 @@ public class LoginByAccountTask extends JsonRequest<TokenInfo> {
 	private final static String TAG=LoginByAccountTask.class.getSimpleName();
 	private static final String ACCOUNT_LOGIN_URL = "login";
 
-	public LoginByAccountTask(Context context,String account,String password,Listener<TokenInfo> listener, ErrorListener errorListener) {
-		super(Method.POST, ACCOUNT_LOGIN_URL,getBody(context,account,password), listener, errorListener);
+	public LoginByAccountTask(Context context,int loginType,String account,String password,Listener<TokenInfo> listener, ErrorListener errorListener) {
+		super(Method.POST, ACCOUNT_LOGIN_URL,getBody(context,loginType,account,password), listener, errorListener);
 	}
 	
-	private static String getBody(Context context, String account,String password){
+	private static String getBody(Context context,int loginType, String account,String password){
 		List<BasicNameValuePair> params = new LinkedList<BasicNameValuePair>();
-		params.add(new BasicNameValuePair("type", "phone"));
-        params.add(new BasicNameValuePair("username", account));
-        params.add(new BasicNameValuePair("password", password));
+		if(loginType==AccountManager.LOGIN_BY_PHONE){
+			params.add(new BasicNameValuePair("type", "phone"));
+	        params.add(new BasicNameValuePair("username", account));
+	        params.add(new BasicNameValuePair("password", password));
+		}else{
+			params.add(new BasicNameValuePair("type", "weixin"));
+	        params.add(new BasicNameValuePair("uid", account));
+	        params.add(new BasicNameValuePair("password", password));
+		}
         
         UrlHelper.addCommonParameters(context, params);
 		return URLEncodedUtils.format(params, "UTF-8");
@@ -52,7 +59,7 @@ public class LoginByAccountTask extends JsonRequest<TokenInfo> {
             }
             
             JSONObject root=new JSONObject(jsonString);
-            ResponseError error=ProtocolUtils.getProtocolInfo(root);
+            ErrorInfo error=ProtocolUtils.getProtocolInfo(root);
             if(error.getErrorCode()!=0){
             	return Response.error(error);
             }

@@ -20,7 +20,8 @@ import com.shuai.demo.MyApplication;
 import com.shuai.demo.R;
 import com.shuai.demo.logic.AccountManager;
 import com.shuai.demo.protocol.LoginByAccountTask;
-import com.shuai.demo.protocol.ResponseError;
+import com.shuai.demo.protocol.ProtocolUtils;
+import com.shuai.demo.protocol.ErrorInfo;
 import com.shuai.demo.protocol.TokenInfo;
 import com.shuai.demo.protocol.RegisterByWeixinTask;
 import com.shuai.demo.protocol.RegisterResult;
@@ -108,7 +109,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		}
     	
     	final String md5Password=Utils.md5(password);
-    	LoginByAccountTask request=new LoginByAccountTask(this,account,md5Password,new Listener<TokenInfo>() {
+    	LoginByAccountTask request=new LoginByAccountTask(this,AccountManager.LOGIN_BY_PHONE,account,md5Password,new Listener<TokenInfo>() {
 
 			@Override
 			public void onResponse(TokenInfo tokenInfo) {
@@ -119,7 +120,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Utils.showShortToast(mContext, ResponseError.getErrorMessage(error));
+				Utils.showShortToast(mContext, ProtocolUtils.getErrorInfo(error).getErrorMessage());
 			}
 			
 		});
@@ -143,11 +144,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Utils.showShortToast(mContext, ResponseError.getErrorMessage(error));
+				Utils.showShortToast(mContext, ProtocolUtils.getErrorInfo(error).getErrorMessage());
 			}
 			
 		});
     	
+    	mLoginByWeixinTask.login();
     }
     
 }

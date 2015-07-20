@@ -54,7 +54,7 @@ public class RegisterByPhoneTask extends JsonRequest<RegisterResult> {
             }
             
             JSONObject root=new JSONObject(jsonString);
-            ResponseError error=ProtocolUtils.getProtocolInfo(root);
+            ErrorInfo error=ProtocolUtils.getProtocolInfo(root);
             if(error.getErrorCode()!=0){
             	return Response.error(error);
             }

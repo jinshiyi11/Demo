@@ -7,5 +7,6 @@
     <string name="tab_topic">专题</string>
     <string name="tab_user">我的</string>
     <string name="loading_video">正在加载视频...</string>
+    <string name="one_more_exit">再按一次退出</string>
 
 </resources>
