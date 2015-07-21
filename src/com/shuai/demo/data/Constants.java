@@ -12,7 +12,7 @@ public class Constants {
     /**
      * 标明请求来自android客户端
      */
-    public static final String FROM_INFO = "android";
+    public static final String DEVICE_INFO = "android";
 	
 	public static final String PROTOCOL_VERSION = "1.0";
 	

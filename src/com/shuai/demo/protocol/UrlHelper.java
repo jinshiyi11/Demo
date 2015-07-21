@@ -32,7 +32,7 @@ public class UrlHelper {
 		params.add(new BasicNameValuePair("version", AppUtils.getVersionName(context)));
 	    params.add(new BasicNameValuePair("protocol_version", Constants.PROTOCOL_VERSION));
 	    params.add(new BasicNameValuePair("channel", AppUtils.getChannel(context)));
-	    params.add(new BasicNameValuePair("from", Constants.FROM_INFO));
+	    params.add(new BasicNameValuePair("device", Constants.DEVICE_INFO));
 	}
 
 }

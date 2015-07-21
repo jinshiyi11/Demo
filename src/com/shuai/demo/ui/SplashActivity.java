@@ -18,12 +18,12 @@ public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         
         //为推送服务统计启动信息
         PushAgent.getInstance(this).onAppStart();
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         
