@@ -3,6 +3,7 @@ package com.shuai.demo.ui.base;
 import com.shuai.demo.R;
 
 import android.R.integer;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.ViewStub.OnInflateListener;
  */
 public abstract class BaseTabFragment extends Fragment {
 
+	protected Context mContext;
 	private Handler mHandler = new Handler();
 
 	private boolean mInitialized;
@@ -30,6 +32,7 @@ public abstract class BaseTabFragment extends Fragment {
 	@Override
 	final public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
+		mContext=getActivity();
 		View view = inflater.inflate(R.layout.fragment_stub, container, false);
 
 		mViewStub = (ViewStub) view.findViewById(R.id.viewStub);

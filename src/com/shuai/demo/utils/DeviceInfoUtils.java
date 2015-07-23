@@ -6,6 +6,11 @@ import android.telephony.TelephonyManager;
 
 public class DeviceInfoUtils {
 
+	/**
+	 * 获取设备唯一id
+	 * @param context
+	 * @return
+	 */
 	public static String getUniqueID(Context context){    
 	    String deviceId = "";
 	    TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

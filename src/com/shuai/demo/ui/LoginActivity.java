@@ -21,10 +21,9 @@ import com.shuai.demo.R;
 import com.shuai.demo.logic.AccountManager;
 import com.shuai.demo.protocol.LoginByAccountTask;
 import com.shuai.demo.protocol.ProtocolUtils;
-import com.shuai.demo.protocol.ErrorInfo;
-import com.shuai.demo.protocol.TokenInfo;
 import com.shuai.demo.protocol.RegisterByWeixinTask;
 import com.shuai.demo.protocol.RegisterResult;
+import com.shuai.demo.protocol.TokenInfo;
 import com.shuai.demo.ui.base.BaseActivity;
 import com.shuai.demo.utils.Utils;
 
